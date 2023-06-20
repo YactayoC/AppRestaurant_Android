@@ -42,7 +42,7 @@ fun OrderHistoryScreen(navigationController: NavHostController, orderHistoryView
           .padding(15.dp),
       ) {
         Spacer(modifier = Modifier.size(60.dp))
-        ListCardOrder(ordersRecents)
+        ListCardOrder(ordersRecents, navigationController)
       }
     },
   )

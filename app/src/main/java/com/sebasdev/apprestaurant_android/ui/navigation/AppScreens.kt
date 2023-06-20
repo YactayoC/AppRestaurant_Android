@@ -13,6 +13,7 @@ sealed class AppScreens(val route: String) {
   object ProfileUpdateScreen: AppScreens("profileUpdate")
   object OrderHistoryScreen: AppScreens("orderHistory")
   object OrderRecentsScreen: AppScreens("orderRecents")
+  object ContactScreen: AppScreens("contactScreen")
 
   // Detail
   object ProductDetailScreen: AppScreens("productDetail/{id}") {
@@ -20,5 +21,8 @@ sealed class AppScreens(val route: String) {
   }
   object ResultSearchScreen: AppScreens("resultSearch/{valueSearch}") {
     fun createRoute(valueSearch: String) = "resultSearch/$valueSearch"
+  }
+  object OrderDetailScreen: AppScreens("orderDetail/{id}") {
+    fun createRoute(id: String) = "orderDetail/$id"
   }
 }

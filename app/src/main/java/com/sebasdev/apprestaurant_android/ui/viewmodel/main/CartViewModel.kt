@@ -46,16 +46,20 @@ class CartViewModel(private val preferencesDataStore: PreferencesDataStore): Vie
   private val _showModal = MutableLiveData<Boolean>()
   val showModal: LiveData<Boolean> = _showModal
 
+  init {
+    _dateCard.value = ""
+  }
+
   fun loadDataPay() {
     viewModelScope.launch {
+      calculateSubTotal()
       val userData = preferencesDataStore.getDataUser().first()
       _direction.value = userData.direction
       _numberCard.value = ""
-      _dateCard.value = null
+      _dateCard.value = ""
       _cvvCard.value = ""
       _fullnames.value = userData.fullname
       _email.value = userData.email
-      _totalAmount.value = _subTotalAmount.value?.plus(7.5)
     }
   }
 
@@ -92,7 +96,7 @@ class CartViewModel(private val preferencesDataStore: PreferencesDataStore): Vie
     viewModelScope.launch {
       val cartProducts = preferencesDataStore.getCartItems()
       _products.value = cartProducts
-      calculateTotal()
+      calculateSubTotal()
     }
   }
 
@@ -100,7 +104,7 @@ class CartViewModel(private val preferencesDataStore: PreferencesDataStore): Vie
     viewModelScope.launch {
       preferencesDataStore.modifyCartItem(product, 1)
       getCartProducts()
-      calculateTotal()
+      calculateSubTotal()
     }
   }
 
@@ -108,21 +112,28 @@ class CartViewModel(private val preferencesDataStore: PreferencesDataStore): Vie
     viewModelScope.launch {
       if (product.quantity!! > 1) {
         preferencesDataStore.modifyCartItem(product, -1)
-        calculateTotal()
+        calculateSubTotal()
       } else {
         preferencesDataStore.removeCartItem(product)
-        calculateTotal()
+        calculateSubTotal()
       }
       getCartProducts()
-      calculateTotal()
+      calculateSubTotal()
     }
   }
 
-  private fun calculateTotal() {
+  private fun calculateSubTotal() {
     viewModelScope.launch {
       val cartProducts = preferencesDataStore.getCartItems()
       val total = cartProducts.sumOf { it.price * it.quantity!! }
       _subTotalAmount.value = total
+    }
+  }
+
+  fun calculateTotal() {
+    viewModelScope.launch {
+      val total = _subTotalAmount.value?.plus(7.5)
+      _totalAmount.value = total
     }
   }
 }

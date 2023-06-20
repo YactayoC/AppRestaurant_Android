@@ -58,29 +58,33 @@ import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ModalPay(cartViewModel: CartViewModel, onPay: () -> Unit) {
+fun ModalPay(cartViewModel: CartViewModel, subTotal: Double, onPay: () -> Unit) {
   LaunchedEffect(Unit) {
     cartViewModel.loadDataPay()
   }
 
   Column {
-    Modal(cartViewModel, onPay)
+    Modal(cartViewModel, subTotal, onPay)
   }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Modal(cartViewModel: CartViewModel, onPay: () -> Unit) {
+fun Modal(cartViewModel: CartViewModel, subTotal: Double, onPay: () -> Unit) {
   val direction: String by cartViewModel.direction.observeAsState(initial = "")
   val numberCard: String by cartViewModel.numberCard.observeAsState(initial = "")
   val dateCard: String by cartViewModel.dateCard.observeAsState(initial = "")
   val cvvCard: String by cartViewModel.cvvCard.observeAsState(initial = "")
   val fullnames: String by cartViewModel.fullnames.observeAsState(initial = "")
   val email: String by cartViewModel.email.observeAsState(initial = "")
-  val subTotalAmount: Double by cartViewModel.subTotalAmount.observeAsState(initial = 0.0)
+
   val totalAmount: Double by cartViewModel.totalAmount.observeAsState(initial = 0.0)
   val isButtonPayEnabled: Boolean by cartViewModel.isButtonPayEnabled.observeAsState(initial = false)
+
+  LaunchedEffect(Unit) {
+    cartViewModel.calculateTotal()
+  }
 
   ModalDrawerSheet {
     AlertDialog(
@@ -131,7 +135,7 @@ fun Modal(cartViewModel: CartViewModel, onPay: () -> Unit) {
           }
           InputFullNames(fullnames)
           InputEmail(email)
-          CardTotal(subTotalAmount, totalAmount, cartViewModel, isButtonPayEnabled, onPay)
+          CardTotal(subTotal, totalAmount, cartViewModel, isButtonPayEnabled, onPay)
         }
 
       },
@@ -206,7 +210,7 @@ private fun InputDate(valueDate: String, onTextChanged: (String) -> Unit) {
     TextField(
       enabled = false,
       value = valueDate ?: "",
-      onValueChange = { onTextChanged(it.toString()) },
+      onValueChange = { onTextChanged(it) },
       modifier = Modifier
         .width(150.dp)
         .clickable {
@@ -232,11 +236,8 @@ private fun InputDate(valueDate: String, onTextChanged: (String) -> Unit) {
           )
         }
       })
-
-
   }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -301,7 +302,7 @@ private fun InputEmail(value: String) {
 @Composable
 private fun CardTotal(
   subTotal: Double,
-  total: Double,
+  total: Double? = 0.0,
   cartViewModel: CartViewModel,
   isButtonPayEnabled: Boolean,
   onPay: () -> Unit
@@ -327,7 +328,7 @@ private fun CardTotal(
           horizontalArrangement = Arrangement.SpaceBetween
         ) {
           Text(text = "Subtotal", color = ColorBlackCustom, fontSize = 18.sp)
-          Text(text = "S/. $subTotal", color = ColorBlackCustom, fontSize = 18.sp)
+          Text(text = "S/. ${subTotal ?: 0.0}", color = ColorBlackCustom, fontSize = 18.sp)
         }
         Row(
           Modifier

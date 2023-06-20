@@ -24,13 +24,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.sebasdev.apprestaurant_android.domain.model.Order
+import com.sebasdev.apprestaurant_android.ui.navigation.AppScreens
 import com.sebasdev.apprestaurant_android.ui.theme.ColorWhiteCustom
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardOrder(order: Order) {
+fun CardOrder(order: Order, navigationController: NavHostController) {
   val color = when(order.state) {
     "en cocina" -> Color(0xFFdc8620)
     "en camino" -> Color(0xFF20BADC)
@@ -40,7 +42,9 @@ fun CardOrder(order: Order) {
   }
 
   Card(
-    onClick = { /*TODO*/ },
+    onClick = {
+      navigationController.navigate(AppScreens.OrderDetailScreen.createRoute(order._id ?: "0"))
+    },
     colors = CardDefaults.cardColors(
       containerColor = ColorWhiteCustom
     ),

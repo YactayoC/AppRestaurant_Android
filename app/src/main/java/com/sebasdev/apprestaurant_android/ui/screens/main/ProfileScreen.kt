@@ -200,7 +200,7 @@ fun OptionsProfile(navigationController: NavHostController) {
     )
     TextButton(
       onClick = {
-        navigationController.navigate(AppScreens.OrderHistoryScreen.route)
+        navigationController.navigate(AppScreens.ContactScreen.route)
       },
       colors = ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.background,

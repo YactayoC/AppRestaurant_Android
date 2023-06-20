@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.size.OriginalSize
 import com.sebasdev.apprestaurant_android.domain.model.Product
@@ -42,6 +43,7 @@ import com.sebasdev.apprestaurant_android.ui.viewmodel.main.ProductDetailViewMod
 import java.util.Locale
 
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun CardProduct(
   navigationController: NavHostController,

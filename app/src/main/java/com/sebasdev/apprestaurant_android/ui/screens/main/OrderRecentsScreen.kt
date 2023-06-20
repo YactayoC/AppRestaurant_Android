@@ -43,7 +43,7 @@ fun OrderRecentsScreen(navigationController: NavHostController, orderRecentsView
           .padding(15.dp),
       ) {
         Spacer(modifier = Modifier.size(60.dp))
-        ListCardOrder(ordersRecents)
+        ListCardOrder(ordersRecents, navigationController)
       }
     },
   )

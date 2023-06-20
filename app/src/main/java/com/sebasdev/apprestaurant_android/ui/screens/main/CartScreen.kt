@@ -45,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.size.OriginalSize
 import com.sebasdev.apprestaurant_android.domain.model.Product
@@ -107,7 +108,7 @@ fun CartScreen(
         ButtonPay(subTotalAmount) { cartViewModel.setShowModal(true)}
 
         if (showModal) {
-          ModalPay(cartViewModel) {
+          ModalPay(cartViewModel = cartViewModel, subTotal = subTotalAmount) {
             orderViewModel.addOrder(subTotalAmount)
           }
         }
@@ -142,6 +143,7 @@ fun ProductsCart(productsCart: List<Product>, cartViewModel: CartViewModel) {
 }
 
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun GroupButtons(product: Product, cartViewModel: CartViewModel) {
   Row(
@@ -217,7 +219,7 @@ fun GroupButtons(product: Product, cartViewModel: CartViewModel) {
 }
 
 @Composable
-fun ButtonPay(totalAmount: Double, onAddOrder: (Double) -> Unit) {
+fun ButtonPay(subTotalAmount: Double, showModal: (Boolean) -> Unit) {
   Column(
     verticalArrangement = Arrangement.Bottom,
     modifier = Modifier
@@ -240,11 +242,12 @@ fun ButtonPay(totalAmount: Double, onAddOrder: (Double) -> Unit) {
           horizontalArrangement = Arrangement.SpaceBetween
         ) {
           Text(text = "Subtotal", color = ColorBlackCustom, fontSize = 20.sp)
-          Text(text = "S/. ${totalAmount}", color = ColorBlackCustom, fontSize = 20.sp)
+          Text(text = "S/. ${subTotalAmount ?: 0.0}", color = ColorBlackCustom, fontSize = 20.sp)
         }
 
         Button(
-          onClick = { onAddOrder(15.0) },
+          enabled = subTotalAmount != 0.0,
+          onClick = { showModal(true) },
           modifier = Modifier.fillMaxWidth(),
           shape = RoundedCornerShape(5.dp),
           colors = ButtonDefaults.buttonColors(

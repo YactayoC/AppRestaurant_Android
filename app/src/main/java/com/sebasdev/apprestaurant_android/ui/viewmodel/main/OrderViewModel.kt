@@ -25,8 +25,8 @@ class OrderViewModel(private val preferencesDataStore: PreferencesDataStore): Vi
           product = productIntCart._id,
           user = user._id,
           subtotal = subTotal,
-          total = productIntCart.price * productIntCart.quantity!!,
-          quantity = productIntCart.quantity!!,
+          total = (productIntCart.price * productIntCart.quantity!!) + 7.50,
+          quantity = productIntCart.quantity,
           state = "en cocina"
         )
         _messageResponse.value = response
