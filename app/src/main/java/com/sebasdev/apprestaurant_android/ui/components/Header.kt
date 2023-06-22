@@ -1,5 +1,6 @@
 package com.sebasdev.apprestaurant_android.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.size.OriginalSize
 import com.sebasdev.apprestaurant_android.domain.model.UserPreference
@@ -25,6 +27,7 @@ import com.sebasdev.apprestaurant_android.ui.data_store.PreferencesDataStore
 import com.sebasdev.apprestaurant_android.ui.navigation.AppScreens
 
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun Header(
   text: String,
@@ -35,6 +38,8 @@ fun Header(
   val userData: UserPreference by preferencesDataStore.getDataUser()
     .collectAsState(initial = UserPreference("", "", "", "", "", ""))
 
+  Log.d("Header", "Header: ${userData.profile}")
+
   Row(
     modifier = Modifier.fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically,
@@ -43,10 +48,12 @@ fun Header(
     Text(text = text, fontSize = 24.sp, fontWeight = FontWeight.Bold)
     if (showProfile) {
       Image(
-        painter = rememberImagePainter(data = userData.profile, builder = {
-          size(OriginalSize)
-          crossfade(true)
-        }),
+        painter = rememberImagePainter(
+          data = userData.profile.ifEmpty { "https://www.tenforums.com/geek/gars/images/2/types/thumb_14400082930User.png" },
+          builder = {
+            size(OriginalSize)
+            crossfade(true)
+          }),
         contentDescription = "avatar",
         modifier = Modifier
           .size(50.dp)

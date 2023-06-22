@@ -25,4 +25,19 @@ sealed class AppScreens(val route: String) {
   object OrderDetailScreen: AppScreens("orderDetail/{id}") {
     fun createRoute(id: String) = "orderDetail/$id"
   }
+
+  // Admin
+  object HomeAdminScreen: AppScreens("homeAdmin")
+  object ManagmentAdminScreen: AppScreens("managmentAdmin")
+  object ManagmentProductsAdminScreen: AppScreens("managmentProductsAdmin")
+  object ManagmentSupplierAdminScreen: AppScreens("managmentSupplierAdmin")
+  object ManagmentListItemAdminScreen: AppScreens("managmentListProductsAdminScreen/{option}") {
+    fun createRoute(option: String) = "managmentListProductsAdminScreen/$option"
+  }
+  object ManagmentItemProductScreen: AppScreens("managmentItemProduct/{id}/{option}") {
+    fun createRoute(id: String, option: String) = "managmentItemProduct/$id/$option"
+  }
+  object ManagmentItemSupplierScreen: AppScreens("managmentItemSupplier/{id}/{option}") {
+    fun createRoute(id: String, option: String) = "managmentItemSupplier/$id/$option"
+  }
 }

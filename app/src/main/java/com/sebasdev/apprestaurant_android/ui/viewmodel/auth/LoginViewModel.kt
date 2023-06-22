@@ -15,8 +15,9 @@ import kotlinx.coroutines.launch
 class LoginViewModel(private val preferencesDataStore: PreferencesDataStore): ViewModel() {
   private val authUseCase = AuthUseCase()
 
-  private val _email = MutableLiveData<String>()
-  val email: LiveData<String> = _email
+  private val _email = MutableLiveData<String>() // DEntro del viewModel
+  val email: LiveData<String> = _email // EN el Screen
+  // [email, setEmail] = useState()
 
   private val _password = MutableLiveData<String>()
   val password: LiveData<String> = _password
@@ -45,7 +46,7 @@ class LoginViewModel(private val preferencesDataStore: PreferencesDataStore): Vi
       _isButtonLoginEnabled.value = false
 
       try {
-        val result = authUseCase.onLogin(email.value!!, password.value!!)
+        val result = authUseCase.onLogin(_email.value!!, _password.value!!)
 
         if (result.errorMessage != null) {
           _messageErrorResponse.value = result.errorMessage.message
@@ -63,7 +64,6 @@ class LoginViewModel(private val preferencesDataStore: PreferencesDataStore): Vi
             )
           }
           navigationController.navigate(AppScreens.HomeScreen.route)
-          Log.i("LOGGER", result.toString())
         }
       } catch (e: Exception) {
         Log.e("LOGGER", "Error en la petición de login: ${e.message}")

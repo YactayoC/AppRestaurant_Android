@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.sebasdev.apprestaurant_android.domain.usecase.AuthUseCase
 import kotlinx.coroutines.launch
 
-class RegisterViewModel: ViewModel() {
+class RegisterViewModel : ViewModel() {
   private val authUseCase = AuthUseCase()
 
   private val _fullname = MutableLiveData<String>()
@@ -41,15 +41,25 @@ class RegisterViewModel: ViewModel() {
     _isButtonRegisterEnabled.value = enableButtonRegister(fullname, phone, email, password)
   }
 
-  private fun enableButtonRegister(fullname: String, phone: String, email: String, password: String) =
-    fullname.all { it.isLetter() } && fullname.trim().length >= 5
+  private fun enableButtonRegister(
+    fullname: String,
+    phone: String,
+    email: String,
+    password: String
+  ): Boolean {
+    val fullnameRegex = Regex("^[a-zA-Z ]+\$")
+    val phoneRegex = Regex("^[0-9]{1,9}\$")
+    return fullnameRegex.matches(fullname.trim()) && fullname.trim().length >= 5
             && Patterns.EMAIL_ADDRESS.matcher(email).matches()
             && password.length >= 6
+            && phoneRegex.matches(phone.trim())
+  }
 
   fun onSubmitRegister() {
     viewModelScope.launch {
       try {
-        val result = authUseCase.onRegister(fullname.value!!, email.value!!, password.value!!, phone.value!!)
+        val result =
+          authUseCase.onRegister(fullname.value!!, email.value!!, password.value!!, phone.value!!)
 
         if (result.errorMessage != null) {
           _messageResponse.value = result.errorMessage.message

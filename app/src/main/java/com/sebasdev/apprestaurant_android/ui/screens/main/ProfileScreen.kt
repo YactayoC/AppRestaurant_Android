@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -89,10 +90,11 @@ fun Profile(profile: String, fullname: String, navigationController: NavHostCont
     verticalArrangement = Arrangement.Top
   ) {
     Image(
-      painter = rememberImagePainter(data = profile, builder = {
+      painter = rememberImagePainter(data = profile.ifEmpty { "https://www.tenforums.com/geek/gars/images/2/types/thumb_14400082930User.png" }, builder = {
         size(OriginalSize)
         crossfade(true)
       }),
+      contentScale = ContentScale.Crop,
       contentDescription = "avatar",
       modifier = Modifier
         .size(200.dp)

@@ -11,3 +11,6 @@ object RetrofitInstance {
       .build()
   }
 }
+
+// .baseUrl("http://192.168.1.12:3000/api/")
+// https://apprestaurantandroidback-production.up.railway.app/api/

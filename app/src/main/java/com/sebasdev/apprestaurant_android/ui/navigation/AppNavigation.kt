@@ -9,6 +9,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.sebasdev.apprestaurant_android.ui.data_store.PreferencesDataStore
+import com.sebasdev.apprestaurant_android.ui.screens.admin.HomeAdminScreen
+import com.sebasdev.apprestaurant_android.ui.screens.admin.ManagmentAdminScreen
+import com.sebasdev.apprestaurant_android.ui.screens.admin.ManagmentItemProductScreen
+import com.sebasdev.apprestaurant_android.ui.screens.admin.ManagmentItemSupplierScreen
+import com.sebasdev.apprestaurant_android.ui.screens.admin.ManagmentListItemAdminScreen
+import com.sebasdev.apprestaurant_android.ui.screens.admin.ManagmentProductsAdminScreen
+import com.sebasdev.apprestaurant_android.ui.screens.admin.ManagmentSupplierAdminScreen
 import com.sebasdev.apprestaurant_android.ui.screens.auth.LoginScreen
 import com.sebasdev.apprestaurant_android.ui.screens.auth.RegisterScreen
 import com.sebasdev.apprestaurant_android.ui.screens.main.CartScreen
@@ -39,7 +46,10 @@ import com.sebasdev.apprestaurant_android.ui.viewmodel.main.ProfileUpdateViewMod
 fun AppNavigation(preferencesDataStore: PreferencesDataStore) {
   val navController = rememberNavController()
 
-  NavHost(navController = navController, startDestination = AppScreens.LoginScreen.route) {
+  NavHost(
+    navController = navController,
+    startDestination = AppScreens.HomeAdminScreen.route
+  ) {
     composable(route = AppScreens.LoginScreen.route) {
       LoginScreen(navController, LoginViewModel(preferencesDataStore))
     }
@@ -130,6 +140,60 @@ fun AppNavigation(preferencesDataStore: PreferencesDataStore) {
         HomeViewModel(preferencesDataStore),
         backStackEntry.arguments?.getString("valueSearch") ?: "",
         ProductDetailViewModel(preferencesDataStore)
+      )
+    }
+
+    // ADMIN
+    composable(route = AppScreens.HomeAdminScreen.route) {
+      HomeAdminScreen(navController)
+    }
+
+    composable(route = AppScreens.ManagmentAdminScreen.route) {
+      ManagmentAdminScreen(navController)
+    }
+
+    composable(route = AppScreens.ManagmentProductsAdminScreen.route) {
+      ManagmentProductsAdminScreen(navController, preferencesDataStore)
+    }
+
+    composable(route = AppScreens.ManagmentSupplierAdminScreen.route) {
+      ManagmentSupplierAdminScreen(navController)
+    }
+
+    composable(
+      route = AppScreens.ManagmentListItemAdminScreen.route,
+      arguments = listOf(navArgument("option") { type = NavType.StringType })
+    ) { backStackEntry ->
+      ManagmentListItemAdminScreen(
+        navController,
+        preferencesDataStore,
+        HomeViewModel(preferencesDataStore),
+        ProductDetailViewModel(preferencesDataStore),
+        backStackEntry.arguments?.getString("option") ?: ""
+      )
+    }
+
+    composable(
+      route = AppScreens.ManagmentItemProductScreen.route,
+      arguments = listOf(navArgument("id") { type = NavType.StringType })
+    ) { backStackEntry ->
+      ManagmentItemProductScreen(
+        navController,
+        ProductDetailViewModel(preferencesDataStore),
+        backStackEntry.arguments?.getString("id") ?: "0",
+        backStackEntry.arguments?.getString("option") ?: ""
+      )
+    }
+
+    composable(
+      route = AppScreens.ManagmentItemSupplierScreen.route,
+      arguments = listOf(navArgument("id") { type = NavType.StringType })
+    ) { backStackEntry ->
+      ManagmentItemSupplierScreen(
+        navController,
+        ProductDetailViewModel(preferencesDataStore),
+        backStackEntry.arguments?.getString("id") ?: "0",
+        backStackEntry.arguments?.getString("option") ?: ""
       )
     }
   }

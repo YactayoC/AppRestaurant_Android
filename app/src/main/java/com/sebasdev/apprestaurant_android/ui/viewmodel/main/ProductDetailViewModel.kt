@@ -14,9 +14,21 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ProductDetailViewModel(private val preferencesDataStore: PreferencesDataStore): ViewModel() {
+class ProductDetailViewModel(private val preferencesDataStore: PreferencesDataStore) : ViewModel() {
   private val homeUseCase = HomeUseCase()
   private val userUseCase = UserUseCase()
+
+  private val _image = MutableLiveData<String>()
+  val image: LiveData<String> = _image
+
+  private val _name = MutableLiveData<String>()
+  val name: LiveData<String> = _name
+
+  private val _description = MutableLiveData<String>()
+  val description: LiveData<String> = _description
+
+  private val _price = MutableLiveData<String>()
+  val price: LiveData<String> = _price
 
   private val _product = MutableLiveData<Product>()
   val product: LiveData<Product> = _product
@@ -43,7 +55,24 @@ class ProductDetailViewModel(private val preferencesDataStore: PreferencesDataSt
           _isFavorite.value = isFavorite
         }
       } catch (e: Exception) {
-        Log.e("LOGGER", "Error en la petición de login: ${e.message}")
+        Log.e("LOGGER", "Error al obtener el producto: ${e.message}")
+      }
+    }
+  }
+
+  fun getProductById(id: String) {
+    viewModelScope.launch {
+      try {
+        val fetchedProduct = homeUseCase.getProduct(id)
+        withContext(Dispatchers.Main) {
+          _product.value = fetchedProduct
+          _image.value = _product.value!!.image
+          _name.value = _product.value!!.name
+          _description.value = _product.value!!.description
+          _price.value = _product.value!!.price.toString()
+        }
+      } catch (e: Exception) {
+        Log.e("LOGGER", "Error al obtener el producto: ${e.message}")
       }
     }
   }
@@ -65,6 +94,16 @@ class ProductDetailViewModel(private val preferencesDataStore: PreferencesDataSt
         Log.e("LOGGER", "Error en la petición de agregar producto favorito: ${e.message}")
       }
     }
+  }
+
+  fun formProductChanged(
+    name: String,
+    description: String,
+    price: String,
+  ) {
+    _name.value = name
+    _description.value = description
+    _price.value = price
   }
 
   fun addToCart(item: Product) {

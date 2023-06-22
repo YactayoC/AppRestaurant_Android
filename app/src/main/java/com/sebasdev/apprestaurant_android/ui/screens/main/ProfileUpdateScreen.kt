@@ -50,6 +50,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.size.OriginalSize
 import com.sebasdev.apprestaurant_android.ui.components.MyTopAppBar
@@ -132,6 +133,7 @@ fun ProfileUpdateScreen(
   )
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun Profile(profile: String, selectedImageUri: Uri?, onImageSelected: (Uri) -> Unit) {
 
@@ -163,7 +165,7 @@ private fun Profile(profile: String, selectedImageUri: Uri?, onImageSelected: (U
       )
     } else {
       Image(
-        painter = rememberImagePainter(data = profile, builder = {
+        painter = rememberImagePainter(data = profile.ifEmpty { "https://www.tenforums.com/geek/gars/images/2/types/thumb_14400082930User.png" }, builder = {
           size(OriginalSize)
           crossfade(true)
         }),

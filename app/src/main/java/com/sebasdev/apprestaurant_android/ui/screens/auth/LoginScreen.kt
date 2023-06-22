@@ -114,7 +114,7 @@ private fun InputEmail(email: String, onTextChanged: (String) -> Unit) {
     modifier = Modifier.fillMaxWidth(),
     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
     colors = TextFieldDefaults.textFieldColors(
-      containerColor = Color.Transparent
+      containerColor = Color.Transparent,
     ),
     placeholder = {
       Text(text = "Ingresa tu email")
