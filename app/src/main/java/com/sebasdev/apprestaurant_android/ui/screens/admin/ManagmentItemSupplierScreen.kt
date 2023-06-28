@@ -1,7 +1,9 @@
 package com.sebasdev.apprestaurant_android.ui.screens.admin
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -39,25 +43,38 @@ import coil.size.OriginalSize
 import com.sebasdev.apprestaurant_android.R
 import com.sebasdev.apprestaurant_android.ui.components.MyTopAppBar
 import com.sebasdev.apprestaurant_android.ui.viewmodel.main.ProductDetailViewModel
+import com.sebasdev.apprestaurant_android.ui.viewmodel.main.SupplierDetailViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManagmentItemSupplierScreen(
   navigationController: NavHostController,
-  productDetailViewModel: ProductDetailViewModel,
+  supplierDetailViewModel: SupplierDetailViewModel,
   id: String,
   option: String,
 ) {
-  val imageProduct: String by productDetailViewModel.image.observeAsState("")
-  val nameProduct: String by productDetailViewModel.name.observeAsState("")
-  val descriptionProduct: String by productDetailViewModel.description.observeAsState("")
-  val priceProduct: String by productDetailViewModel.price.observeAsState("")
-
+  val nameSupplier: String by supplierDetailViewModel.name.observeAsState("")
+  val rucSupplier: String by supplierDetailViewModel.ruc.observeAsState("")
+  val phoneSupplier: String by supplierDetailViewModel.phone.observeAsState("")
+  val directionSupplier: String by supplierDetailViewModel.direction.observeAsState("")
+  val emailSupplier: String by supplierDetailViewModel.email.observeAsState("")
+  val message: String by supplierDetailViewModel.message.observeAsState("")
+  val context = LocalContext.current
 
   LaunchedEffect(true) {
     if (id != "0") {
-      productDetailViewModel.getProductById(id)
+      supplierDetailViewModel.getSupplierById(id)
+    }
+  }
+
+  LaunchedEffect(message) {
+    if (message.isNotEmpty()) {
+      Toast.makeText(
+        context,
+        message,
+        Toast.LENGTH_SHORT
+      ).show()
     }
   }
 
@@ -75,7 +92,9 @@ fun ManagmentItemSupplierScreen(
         .padding(15.dp),
     ) {
       Spacer(modifier = Modifier.size(60.dp))
-      ImageSupplier(imageProduct, option = option)
+      if (option == "add") {
+        ImageSupplier()
+      }
       Spacer(modifier = Modifier.size(20.dp))
       Column(
         Modifier
@@ -84,85 +103,88 @@ fun ManagmentItemSupplierScreen(
           .verticalScroll(rememberScrollState())
           .padding(bottom = 30.dp),
       ) {
-        InputNameSupplier(nameProduct) {
-          productDetailViewModel.formProductChanged(
+        InputNameSupplier(nameSupplier) {
+          supplierDetailViewModel.formSupplierChanged(
             it,
-            descriptionProduct,
-            priceProduct.toString()
+            rucSupplier,
+            phoneSupplier,
+            directionSupplier,
+            emailSupplier
           )
         }
         Spacer(modifier = Modifier.size(20.dp))
-        InputRucSupplier(descriptionProduct) {
-          productDetailViewModel.formProductChanged(
-            nameProduct,
+        InputRucSupplier(rucSupplier) {
+          supplierDetailViewModel.formSupplierChanged(
+            nameSupplier,
             it,
-            priceProduct.toString()
+            phoneSupplier,
+            directionSupplier,
+            emailSupplier
           )
         }
         Spacer(modifier = Modifier.size(20.dp))
-        InputPhoneSupplier(priceProduct.toString()) {
-          productDetailViewModel.formProductChanged(
-            nameProduct,
-            descriptionProduct,
+        InputPhoneSupplier(phoneSupplier) {
+          supplierDetailViewModel.formSupplierChanged(
+            nameSupplier,
+            rucSupplier,
+            it,
+            directionSupplier,
+            emailSupplier
+          )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        InputDirectionSupplier(directionSupplier) {
+          supplierDetailViewModel.formSupplierChanged(
+            nameSupplier,
+            rucSupplier,
+            phoneSupplier,
+            it,
+            emailSupplier
+          )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        InputEmailSupplier(emailSupplier) {
+          supplierDetailViewModel.formSupplierChanged(
+            nameSupplier,
+            rucSupplier,
+            phoneSupplier,
+            directionSupplier,
             it
           )
         }
-        Spacer(modifier = Modifier.size(20.dp))
-        InputDirectionSupplier(descriptionProduct) {
-          productDetailViewModel.formProductChanged(
-            nameProduct,
-            it,
-            priceProduct.toString()
-          )
-        }
-        Spacer(modifier = Modifier.size(20.dp))
-        InputEmailSupplier(descriptionProduct) {
-          productDetailViewModel.formProductChanged(
-            nameProduct,
-            it,
-            priceProduct.toString()
-          )
-        }
       }
-      ButtonSupplier(option) { }
+      Column(
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+      ) {
+        ButtonSupplier(option) {
+          if (option == "add") {
+            supplierDetailViewModel.addSupplier()
+            supplierDetailViewModel.clearData()
+          } else {
+            supplierDetailViewModel.updateSupplier(id)
+          }
+        }
+        ButtonDeleteSupplier(navigationController) { supplierDetailViewModel.deleteSupplier(id) }
+      }
     }
   }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
-fun ImageSupplier(
-  image: String,
-  option: String
-) {
+fun ImageSupplier() {
   Column(
     Modifier
       .fillMaxWidth(),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    if (option == "add") {
-      Image(
-        painter = painterResource(id = R.drawable.proveedor),
-        contentScale = ContentScale.Crop,
-        contentDescription = "avatar",
-        modifier = Modifier
-          .size(200.dp)
-          .clip(CircleShape)
-      )
-    } else {
-      Image(
-        painter = rememberImagePainter(data = image, builder = {
-          size(OriginalSize)
-          crossfade(true)
-        }),
-        contentScale = ContentScale.Crop,
-        contentDescription = "avatar",
-        modifier = Modifier
-          .size(200.dp)
-          .clip(CircleShape)
-      )
-    }
-    
+    Image(
+      painter = painterResource(id = R.drawable.proveedor),
+      contentScale = ContentScale.Crop,
+      contentDescription = "avatar",
+      modifier = Modifier
+        .size(200.dp)
+        .clip(CircleShape)
+    )
   }
 }
 
@@ -190,7 +212,7 @@ private fun InputRucSupplier(description: String, onTextChanged: (String) -> Uni
   TextField(
     value = description,
     onValueChange = { onTextChanged(it) },
-    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
     singleLine = true,
     maxLines = 1,
     modifier = Modifier.fillMaxWidth(),
@@ -245,7 +267,7 @@ private fun InputEmailSupplier(description: String, onTextChanged: (String) -> U
   TextField(
     value = description,
     onValueChange = { onTextChanged(it) },
-    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
     singleLine = true,
     maxLines = 1,
     modifier = Modifier.fillMaxWidth(),
@@ -258,14 +280,38 @@ private fun InputEmailSupplier(description: String, onTextChanged: (String) -> U
 }
 
 @Composable
-private fun ButtonSupplier(option: String, onClick: () -> Unit) {
+private fun ButtonSupplier(option: String, optionSupplier: () -> Unit) {
   Button(
-    onClick = {}, modifier = Modifier
+    onClick = {
+      optionSupplier()
+    },
+    modifier = Modifier
       .fillMaxWidth()
       .height(50.dp)
   ) {
     Text(
       text = if (option == "add") "Agregar proveedor" else "Actualizar proveedor",
+      fontSize = 18.sp
+    )
+  }
+}
+
+@Composable
+private fun ButtonDeleteSupplier(
+  navigationController: NavHostController,
+  deleteSupplier: () -> Unit
+) {
+  Button(
+    onClick = {
+      deleteSupplier()
+      navigationController.popBackStack()
+    }, modifier = Modifier
+      .fillMaxWidth()
+      .height(50.dp),
+    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+  ) {
+    Text(
+      text = "Eliminar proveedor",
       fontSize = 18.sp
     )
   }

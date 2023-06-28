@@ -15,9 +15,8 @@ import kotlinx.coroutines.launch
 class LoginViewModel(private val preferencesDataStore: PreferencesDataStore): ViewModel() {
   private val authUseCase = AuthUseCase()
 
-  private val _email = MutableLiveData<String>() // DEntro del viewModel
-  val email: LiveData<String> = _email // EN el Screen
-  // [email, setEmail] = useState()
+  private val _email = MutableLiveData<String>()
+  val email: LiveData<String> = _email
 
   private val _password = MutableLiveData<String>()
   val password: LiveData<String> = _password
@@ -63,7 +62,13 @@ class LoginViewModel(private val preferencesDataStore: PreferencesDataStore): Vi
               result.user.direction ?: "",
             )
           }
-          navigationController.navigate(AppScreens.HomeScreen.route)
+
+          if (result.user?.email == "admin@gmail.com") {
+            navigationController.navigate(AppScreens.HomeAdminScreen.route)
+          } else {
+            navigationController.navigate(AppScreens.HomeScreen.route)
+          }
+
         }
       } catch (e: Exception) {
         Log.e("LOGGER", "Error en la petición de login: ${e.message}")

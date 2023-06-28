@@ -36,7 +36,7 @@ fun CardOrder(order: Order, navigationController: NavHostController) {
   val color = when(order.state) {
     "en cocina" -> Color(0xFFdc8620)
     "en camino" -> Color(0xFF20BADC)
-    "entregado" -> Color(0xFF12FDC20)
+    "entregado" -> Color(0xF130DA21)
     "cancelado" -> Color(0xFFDC2020)
     else -> Color(0xFFdc8620)
   }

@@ -18,7 +18,7 @@ fun ListCardAdmin(
   suppliers: List<Supplier>,
   navigationController: NavHostController,
   productDetailViewModel: ProductDetailViewModel,
-  option: String
+  option: String,
 ) {
   LazyVerticalGrid(
     columns = GridCells.Fixed(1),

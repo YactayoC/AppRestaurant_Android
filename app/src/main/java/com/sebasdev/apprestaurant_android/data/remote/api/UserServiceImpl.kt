@@ -1,7 +1,7 @@
 package com.sebasdev.apprestaurant_android.data.remote.api
 
 import com.google.gson.Gson
-import com.sebasdev.apprestaurant_android.data.remote.model.ErrorResponse
+import com.sebasdev.apprestaurant_android.data.remote.model.response.ErrorResponse
 import com.sebasdev.apprestaurant_android.data.remote.network.RetrofitInstance
 import com.sebasdev.apprestaurant_android.domain.model.Product
 import kotlinx.coroutines.Dispatchers

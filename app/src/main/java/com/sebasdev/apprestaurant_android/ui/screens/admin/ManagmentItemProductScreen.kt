@@ -1,6 +1,7 @@
 package com.sebasdev.apprestaurant_android.ui.screens.admin
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,15 +30,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.size.OriginalSize
 import com.sebasdev.apprestaurant_android.R
+import com.sebasdev.apprestaurant_android.data.remote.model.request.CreateProductRequest
 import com.sebasdev.apprestaurant_android.ui.components.MyTopAppBar
 import com.sebasdev.apprestaurant_android.ui.viewmodel.main.ProductDetailViewModel
 
@@ -53,11 +58,22 @@ fun ManagmentItemProductScreen(
   val nameProduct: String by productDetailViewModel.name.observeAsState("")
   val descriptionProduct: String by productDetailViewModel.description.observeAsState("")
   val priceProduct: String by productDetailViewModel.price.observeAsState("")
+  val categoryProduct: String by productDetailViewModel.category.observeAsState("")
+  val message: String by productDetailViewModel.message.observeAsState("")
+  val context = LocalContext.current
 
 
   LaunchedEffect(true) {
+    productDetailViewModel.getCategoryAdmin()
     if (id != "0") {
       productDetailViewModel.getProductById(id)
+    }
+  }
+
+  LaunchedEffect(message) {
+    if (message.isNotEmpty()) {
+      Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+      productDetailViewModel.clearMessage()
     }
   }
 
@@ -80,35 +96,55 @@ fun ManagmentItemProductScreen(
       Column(
         Modifier
           .fillMaxWidth()
-          .height(420.dp)
+          .height(320.dp)
           .verticalScroll(rememberScrollState())
           .padding(bottom = 30.dp),
       ) {
-        InputNameSupplier(nameProduct) {
+        InputNameProduct(nameProduct) {
           productDetailViewModel.formProductChanged(
             it,
             descriptionProduct,
-            priceProduct.toString()
+            priceProduct.toString(),
+            categoryProduct,
+            imageProduct
           )
         }
         Spacer(modifier = Modifier.size(20.dp))
-        InputRucSupplier(descriptionProduct) {
+        InputDescriptionProduct(descriptionProduct) {
           productDetailViewModel.formProductChanged(
             nameProduct,
             it,
-            priceProduct.toString()
+            priceProduct.toString(),
+            categoryProduct,
+            imageProduct
           )
         }
         Spacer(modifier = Modifier.size(20.dp))
-        InputPhoneSupplier(priceProduct.toString()) {
+        InputPriceProduct(priceProduct.toString()) {
           productDetailViewModel.formProductChanged(
             nameProduct,
             descriptionProduct,
-            it
+            it,
+            categoryProduct,
+            imageProduct
           )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        InputCategoryProduct(categoryProduct)
+      }
+      Column(
+        Modifier.fillMaxWidth()
+      ) {
+        ButtonProduct(option) {
+          if (option == "add") productDetailViewModel.addProduct() else productDetailViewModel.updateProduct(
+            id
+          )
+        }
+
+        if (option != "add") {
+          ButtonDeleteProduct(navigationController) { productDetailViewModel.deleteProduct(id) }
         }
       }
-      ButtonProduct(option) { }
     }
   }
 }
@@ -146,13 +182,13 @@ fun ImageProduct(
           .clip(CircleShape)
       )
     }
-    
+
   }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun InputNameSupplier(name: String, onTextChanged: (String) -> Unit) {
+private fun InputNameProduct(name: String, onTextChanged: (String) -> Unit) {
   TextField(
     value = name.capitalize(),
     onValueChange = { onTextChanged(it) },
@@ -170,7 +206,7 @@ private fun InputNameSupplier(name: String, onTextChanged: (String) -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun InputRucSupplier(description: String, onTextChanged: (String) -> Unit) {
+private fun InputDescriptionProduct(description: String, onTextChanged: (String) -> Unit) {
   TextField(
     value = description,
     onValueChange = { onTextChanged(it) },
@@ -188,7 +224,7 @@ private fun InputRucSupplier(description: String, onTextChanged: (String) -> Uni
 
 @ExperimentalMaterial3Api
 @Composable()
-private fun InputPhoneSupplier(price: String, onTextChanged: (String) -> Unit) {
+private fun InputPriceProduct(price: String, onTextChanged: (String) -> Unit) {
   TextField(
     value = price,
     onValueChange = { onTextChanged(it) },
@@ -205,15 +241,56 @@ private fun InputPhoneSupplier(price: String, onTextChanged: (String) -> Unit) {
   )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ButtonProduct(option: String, onClick: () -> Unit) {
+private fun InputCategoryProduct(category: String) {
+  TextField(
+    enabled = false,
+    value = category,
+    onValueChange = { },
+    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+    singleLine = true,
+    maxLines = 1,
+    modifier = Modifier.fillMaxWidth(),
+    colors = TextFieldDefaults.textFieldColors(
+      containerColor = Color.Transparent
+    ),
+    label = {
+      Text(text = "Categoria")
+    })
+}
+
+@Composable
+private fun ButtonProduct(option: String, clickButton: () -> Unit) {
   Button(
-    onClick = {}, modifier = Modifier
+    onClick = {
+      clickButton()
+    }, modifier = Modifier
       .fillMaxWidth()
-      .height(50.dp)
   ) {
     Text(
       text = if (option == "add") "Agregar producto" else "Actualizar producto",
+      fontSize = 18.sp
+    )
+  }
+}
+
+@Composable
+private fun ButtonDeleteProduct(
+  navigationController: NavHostController,
+  onDeleteProduct: () -> Unit
+) {
+  Button(
+    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+    onClick = {
+      onDeleteProduct()
+      navigationController.popBackStack()
+    },
+    modifier = Modifier
+      .fillMaxWidth()
+  ) {
+    Text(
+      text = "Eliminar producto",
       fontSize = 18.sp
     )
   }

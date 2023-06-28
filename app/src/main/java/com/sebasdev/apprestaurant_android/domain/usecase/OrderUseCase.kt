@@ -11,9 +11,10 @@ class OrderUseCase {
   suspend fun createOrder(
     product: String,
     user: String,
+    direction: String,
     subtotal: Double,
     total: Double,
     quantity: Int,
     state: String
-  ): String = repository.addOrder(product, user, subtotal, total, quantity, state)
+  ): String = repository.addOrder(product, user, direction, subtotal, total, quantity, state)
 }

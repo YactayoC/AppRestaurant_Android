@@ -20,6 +20,7 @@ class OrderRecentsViewModel(private val preferencesDataStore: PreferencesDataSto
   fun getListOrdersRecents() {
     viewModelScope.launch {
       try {
+        Log.d("LOGGER", "Id del usuario: ${preferencesDataStore.getDataUser().first()._id}")
         val response = orderUseCase.getOrders(preferencesDataStore.getDataUser().first()._id)
         _ordersRecents.value = response.filter {
           it.state == "en cocina" || it.state == "en camino"

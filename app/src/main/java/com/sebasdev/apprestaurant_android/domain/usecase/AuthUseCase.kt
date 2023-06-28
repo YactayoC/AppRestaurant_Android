@@ -1,7 +1,7 @@
 package com.sebasdev.apprestaurant_android.domain.usecase
 
-import com.sebasdev.apprestaurant_android.data.remote.model.LoginResponse
-import com.sebasdev.apprestaurant_android.data.remote.model.RegisterResponse
+import com.sebasdev.apprestaurant_android.data.remote.model.response.LoginResponse
+import com.sebasdev.apprestaurant_android.data.remote.model.response.RegisterResponse
 import com.sebasdev.apprestaurant_android.data.repository.AuthRepository
 
 class AuthUseCase {

@@ -1,6 +1,6 @@
 package com.sebasdev.apprestaurant_android.data.remote.api
 
-import com.sebasdev.apprestaurant_android.data.remote.model.CreateOrderRequest
+import com.sebasdev.apprestaurant_android.data.remote.model.request.CreateOrderRequest
 import com.sebasdev.apprestaurant_android.data.remote.network.RetrofitInstance
 import com.sebasdev.apprestaurant_android.domain.model.Order
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +43,7 @@ class OrderServiceImpl {
   suspend fun addOrder(
     product: String,
     user: String,
+    direction: String,
     subtotal: Double,
     total: Double,
     quantity: Int,
@@ -50,7 +51,7 @@ class OrderServiceImpl {
   ): String {
     return withContext(Dispatchers.IO) {
       try {
-        val request = CreateOrderRequest(product, user, subtotal, total, quantity, state)
+        val request = CreateOrderRequest(product, user, direction, subtotal, total, quantity, state)
         val response = retrofit.create(OrderService::class.java).addOrder(request)
 
         if (response.isSuccessful) {

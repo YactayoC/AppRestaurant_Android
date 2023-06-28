@@ -73,8 +73,8 @@ class CartViewModel(private val preferencesDataStore: PreferencesDataStore): Vie
 
   fun onPay() {
     viewModelScope.launch {
-      //preferencesDataStore.clearCart()
-      //getCartProducts()
+      preferencesDataStore.clearCartItems()
+      getCartProducts()
       _message.value = "Se proceso el pago correctamente"
       _showModal.value = false
     }

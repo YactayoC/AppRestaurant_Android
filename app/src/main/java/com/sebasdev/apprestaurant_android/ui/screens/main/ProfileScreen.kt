@@ -51,6 +51,9 @@ import com.sebasdev.apprestaurant_android.ui.data_store.PreferencesDataStore
 import com.sebasdev.apprestaurant_android.ui.navigation.AppScreens
 import com.sebasdev.apprestaurant_android.ui.theme.ColorBlackCustom
 import com.sebasdev.apprestaurant_android.ui.theme.ColorWhiteCustom
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -74,7 +77,7 @@ fun ProfileScreen(
         Spacer(modifier = Modifier.size(20.dp))
         Profile(userData.profile, userData.fullname, navigationController)
         Spacer(modifier = Modifier.size(20.dp))
-        OptionsProfile(navigationController)
+        OptionsProfile(navigationController, preferencesDataStore)
       }
     },
     bottomBar = { NavigationBottomBar(navigationController, 3) }
@@ -126,7 +129,7 @@ fun Profile(profile: String, fullname: String, navigationController: NavHostCont
 }
 
 @Composable
-fun OptionsProfile(navigationController: NavHostController) {
+fun OptionsProfile(navigationController: NavHostController, preferencesDataStore: PreferencesDataStore) {
   Column(
     horizontalAlignment = Alignment.Start,
     verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -236,7 +239,10 @@ fun OptionsProfile(navigationController: NavHostController) {
     )
     TextButton(
       onClick = {
-        navigationController.navigate(AppScreens.LoginScreen.route)
+        CoroutineScope(Dispatchers.Main).launch {
+          preferencesDataStore.clearUserData()
+          navigationController.navigate(AppScreens.LoginScreen.route)
+        }
       },
       colors = ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.background,

@@ -40,6 +40,7 @@ import com.sebasdev.apprestaurant_android.ui.viewmodel.main.OrderRecentsViewMode
 import com.sebasdev.apprestaurant_android.ui.viewmodel.main.OrderViewModel
 import com.sebasdev.apprestaurant_android.ui.viewmodel.main.ProductDetailViewModel
 import com.sebasdev.apprestaurant_android.ui.viewmodel.main.ProfileUpdateViewModel
+import com.sebasdev.apprestaurant_android.ui.viewmodel.main.SupplierDetailViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -191,7 +192,7 @@ fun AppNavigation(preferencesDataStore: PreferencesDataStore) {
     ) { backStackEntry ->
       ManagmentItemSupplierScreen(
         navController,
-        ProductDetailViewModel(preferencesDataStore),
+        SupplierDetailViewModel(),
         backStackEntry.arguments?.getString("id") ?: "0",
         backStackEntry.arguments?.getString("option") ?: ""
       )

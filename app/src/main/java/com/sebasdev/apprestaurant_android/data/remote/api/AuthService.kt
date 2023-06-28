@@ -1,7 +1,7 @@
 package com.sebasdev.apprestaurant_android.data.remote.api
 
-import com.sebasdev.apprestaurant_android.data.remote.model.LoginResponse
-import com.sebasdev.apprestaurant_android.data.remote.model.RegisterResponse
+import com.sebasdev.apprestaurant_android.data.remote.model.response.LoginResponse
+import com.sebasdev.apprestaurant_android.data.remote.model.response.RegisterResponse
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

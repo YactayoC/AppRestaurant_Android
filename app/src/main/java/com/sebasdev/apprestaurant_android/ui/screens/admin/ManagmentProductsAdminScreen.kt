@@ -31,12 +31,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
 import com.sebasdev.apprestaurant_android.R
 import com.sebasdev.apprestaurant_android.ui.components.Header
+import com.sebasdev.apprestaurant_android.ui.components.MyTopAppBar
 import com.sebasdev.apprestaurant_android.ui.data_store.PreferencesDataStore
 import com.sebasdev.apprestaurant_android.ui.navigation.AppScreens
 import com.sebasdev.apprestaurant_android.ui.theme.ColorWhiteCustom
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,30 +51,32 @@ fun ManagmentProductsAdminScreen(
   preferencesDataStore: PreferencesDataStore
 ) {
   Scaffold(
+    topBar = {
+      MyTopAppBar(
+        navigationController,
+        "Gestionar productos"
+      )
+    },
     content = {
       Column(
         Modifier
           .fillMaxSize()
           .padding(15.dp),
       ) {
-        Header(
-          text = "Gestionar Productos",
-          navigationController = navigationController,
-          preferencesDataStore = preferencesDataStore
-        )
         Spacer(modifier = Modifier.size(60.dp))
-        CardCategoryOne(navigationController)
+        Spacer(modifier = Modifier.size(60.dp))
+        CardCategoryOne(navigationController, preferencesDataStore)
         Spacer(modifier = Modifier.size(30.dp))
-        CardCategoryTwo(navigationController)
+        CardCategoryTwo(navigationController, preferencesDataStore)
         Spacer(modifier = Modifier.size(30.dp))
-        CardCategoryThree(navigationController)
+        CardCategoryThree(navigationController, preferencesDataStore)
       }
     },
   )
 }
 
 @Composable
-fun CardCategoryOne(navigationController: NavHostController) {
+fun CardCategoryOne(navigationController: NavHostController, preferencesDataStore: PreferencesDataStore) {
   Card(
     modifier = Modifier.fillMaxWidth(),
     colors = CardDefaults.cardColors(
@@ -83,7 +90,7 @@ fun CardCategoryOne(navigationController: NavHostController) {
         colors = CardDefaults.cardColors(
           containerColor = ColorWhiteCustom
         ),
-        modifier = Modifier.width(300.dp)
+        modifier = Modifier.width(320.dp)
       ) {
         Row(
           verticalAlignment = Alignment.CenterVertically,
@@ -110,9 +117,14 @@ fun CardCategoryOne(navigationController: NavHostController) {
         Icon(
           imageVector = Icons.Outlined.ArrowForwardIos,
           contentDescription = "Next",
-          Modifier.size(30.dp).clickable {
-            navigationController.navigate(AppScreens.ManagmentListItemAdminScreen.createRoute("products"))
-          }
+          Modifier
+            .size(30.dp)
+            .clickable {
+              CoroutineScope(Dispatchers.Main).launch {
+                preferencesDataStore.setCategoryProductAdmin("A la brasa")
+                navigationController.navigate(AppScreens.ManagmentListItemAdminScreen.createRoute("products"))
+              }
+            }
         )
       }
     }
@@ -120,7 +132,7 @@ fun CardCategoryOne(navigationController: NavHostController) {
 }
 
 @Composable
-fun CardCategoryTwo(navigationController: NavHostController) {
+fun CardCategoryTwo(navigationController: NavHostController, preferencesDataStore: PreferencesDataStore) {
   Card(
     modifier = Modifier.fillMaxWidth(),
     colors = CardDefaults.cardColors(
@@ -134,7 +146,7 @@ fun CardCategoryTwo(navigationController: NavHostController) {
         colors = CardDefaults.cardColors(
           containerColor = ColorWhiteCustom
         ),
-        modifier = Modifier.width(300.dp)
+        modifier = Modifier.width(320.dp)
       ) {
         Row(
           verticalAlignment = Alignment.CenterVertically,
@@ -161,9 +173,14 @@ fun CardCategoryTwo(navigationController: NavHostController) {
         Icon(
           imageVector = Icons.Outlined.ArrowForwardIos,
           contentDescription = "Next",
-          Modifier.size(30.dp).clickable {
-            navigationController.navigate(AppScreens.LoginScreen.route)
-          }
+          Modifier
+            .size(30.dp)
+            .clickable {
+              CoroutineScope(Dispatchers.Main).launch {
+                preferencesDataStore.setCategoryProductAdmin("Parrillas")
+                navigationController.navigate(AppScreens.ManagmentListItemAdminScreen.createRoute("products"))
+              }
+            }
         )
       }
     }
@@ -171,7 +188,7 @@ fun CardCategoryTwo(navigationController: NavHostController) {
 }
 
 @Composable
-fun CardCategoryThree(navigationController: NavHostController) {
+fun CardCategoryThree(navigationController: NavHostController, preferencesDataStore: PreferencesDataStore) {
   Card(
     modifier = Modifier.fillMaxWidth(),
     colors = CardDefaults.cardColors(
@@ -185,7 +202,7 @@ fun CardCategoryThree(navigationController: NavHostController) {
         colors = CardDefaults.cardColors(
           containerColor = ColorWhiteCustom
         ),
-        modifier = Modifier.width(300.dp)
+        modifier = Modifier.width(320.dp)
       ) {
         Row(
           verticalAlignment = Alignment.CenterVertically,
@@ -212,9 +229,14 @@ fun CardCategoryThree(navigationController: NavHostController) {
         Icon(
           imageVector = Icons.Outlined.ArrowForwardIos,
           contentDescription = "Next",
-          Modifier.size(30.dp).clickable {
-            navigationController.navigate(AppScreens.LoginScreen.route)
-          }
+          Modifier
+            .size(30.dp)
+            .clickable {
+              CoroutineScope(Dispatchers.Main).launch {
+                preferencesDataStore.setCategoryProductAdmin("Bebidas")
+                navigationController.navigate(AppScreens.ManagmentListItemAdminScreen.createRoute("products"))
+              }
+            }
         )
       }
     }

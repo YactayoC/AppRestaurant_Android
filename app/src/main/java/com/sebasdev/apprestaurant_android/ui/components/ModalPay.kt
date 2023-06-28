@@ -54,24 +54,25 @@ import com.sebasdev.apprestaurant_android.R
 import com.sebasdev.apprestaurant_android.ui.theme.ColorBlackCustom
 import com.sebasdev.apprestaurant_android.ui.theme.ColorWhiteCustom
 import com.sebasdev.apprestaurant_android.ui.viewmodel.main.CartViewModel
+import com.sebasdev.apprestaurant_android.ui.viewmodel.main.OrderViewModel
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ModalPay(cartViewModel: CartViewModel, subTotal: Double, onPay: () -> Unit) {
+fun ModalPay(cartViewModel: CartViewModel, subTotal: Double, orderViewModel: OrderViewModel) {
   LaunchedEffect(Unit) {
     cartViewModel.loadDataPay()
   }
 
   Column {
-    Modal(cartViewModel, subTotal, onPay)
+    Modal(cartViewModel, subTotal, orderViewModel)
   }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Modal(cartViewModel: CartViewModel, subTotal: Double, onPay: () -> Unit) {
+fun Modal(cartViewModel: CartViewModel, subTotal: Double, orderViewModel: OrderViewModel) {
   val direction: String by cartViewModel.direction.observeAsState(initial = "")
   val numberCard: String by cartViewModel.numberCard.observeAsState(initial = "")
   val dateCard: String by cartViewModel.dateCard.observeAsState(initial = "")
@@ -135,7 +136,14 @@ fun Modal(cartViewModel: CartViewModel, subTotal: Double, onPay: () -> Unit) {
           }
           InputFullNames(fullnames)
           InputEmail(email)
-          CardTotal(subTotal, totalAmount, cartViewModel, isButtonPayEnabled, onPay)
+          CardTotal(
+            subTotal,
+            totalAmount,
+            cartViewModel,
+            isButtonPayEnabled,
+            orderViewModel,
+            direction
+          )
         }
 
       },
@@ -305,7 +313,8 @@ private fun CardTotal(
   total: Double? = 0.0,
   cartViewModel: CartViewModel,
   isButtonPayEnabled: Boolean,
-  onPay: () -> Unit
+  orderViewModel: OrderViewModel,
+  direction: String
 ) {
   Column(
     verticalArrangement = Arrangement.Bottom,
@@ -353,7 +362,8 @@ private fun CardTotal(
           enabled = isButtonPayEnabled,
           onClick = {
             cartViewModel.onPay()
-            onPay()
+            orderViewModel.addOrder(subTotal, direction)
+//            addOrder() // Vienen de orderViewModel
           },
           modifier = Modifier.fillMaxWidth(),
           shape = RoundedCornerShape(5.dp),

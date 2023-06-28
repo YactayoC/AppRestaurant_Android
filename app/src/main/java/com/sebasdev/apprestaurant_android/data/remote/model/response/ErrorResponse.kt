@@ -1,4 +1,4 @@
-package com.sebasdev.apprestaurant_android.data.remote.model
+package com.sebasdev.apprestaurant_android.data.remote.model.response
 
 data class ErrorResponse(
   val statusCode: Int,

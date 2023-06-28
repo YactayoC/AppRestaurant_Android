@@ -82,6 +82,7 @@ fun OrderDetailScreen(
         updatedAt = "",
         quantity = null
       ),
+      direction = "",
       subtotal = 0.0,
       total = 0.0,
       quantity = 0,
@@ -121,9 +122,9 @@ fun State(order: Order) {
   val color = when (order.state) {
     "en cocina" -> Color(0xFFdc8620)
     "en camino" -> Color(0xFF20BADC)
-    "entregado" -> Color(0xFF12FDC20)
+    "entregado" -> Color(0xF12FDA21)
     "cancelado" -> Color(0xFFDC2020)
-    else -> Color(0xFFdc8620)
+    else -> Color(0xFFFFFFFF)
   }
 
 
@@ -156,7 +157,7 @@ fun State(order: Order) {
         modifier = Modifier.padding(15.dp)
       ) {
         Icon(imageVector = Icons.Outlined.LocationOn, contentDescription = "location")
-        Text(text = "${order.user.direction}", fontSize = 18.sp)
+        Text(text = order.direction, fontSize = 18.sp)
       }
     }
 

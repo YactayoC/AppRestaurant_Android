@@ -25,6 +25,7 @@ class PreferencesDataStore(context: Context) {
     var userEmail = stringPreferencesKey("USER_EMAIL")
     var userDirection = stringPreferencesKey("USER_DIRECTION")
     var cartItems = stringPreferencesKey("CART_ITEMS")
+    var categoryProductAdmin = stringPreferencesKey("CATEGORY_ADMIN")
   }
 
   suspend fun setDataUser(
@@ -54,6 +55,17 @@ class PreferencesDataStore(context: Context) {
       phone = it[userPhone] ?: "",
       email = it[userEmail] ?: "",
     )
+  }
+
+  suspend fun clearUserData() {
+    pref.edit {
+      it.remove(userId)
+      it.remove(userFullname)
+      it.remove(userPhone)
+      it.remove(userEmail)
+      it.remove(userProfile)
+      it.remove(userDirection)
+    }
   }
 
   suspend fun getCartItems(): List<Product> {
@@ -95,6 +107,22 @@ class PreferencesDataStore(context: Context) {
     val cartItemsJson = Gson().toJson(currentCartItems)
     pref.edit {
       it[cartItems] = cartItemsJson
+    }
+  }
+
+  suspend fun setCategoryProductAdmin(category: String) {
+    pref.edit {
+      it[categoryProductAdmin] = category
+    }
+  }
+
+  fun getCategoryProductAdmin() = pref.data.map {
+    it[categoryProductAdmin] ?: ""
+  }
+
+  suspend fun clearCartItems() {
+    pref.edit {
+      it.remove(cartItems)
     }
   }
 }

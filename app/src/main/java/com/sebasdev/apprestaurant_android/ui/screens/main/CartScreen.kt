@@ -105,12 +105,14 @@ fun CartScreen(
         Spacer(modifier = Modifier.size(20.dp))
         ProductsCart(productsCart, cartViewModel)
         //ButtonPay(subTotalAmount) { orderViewModel.addOrder(subTotalAmount)}
-        ButtonPay(subTotalAmount) { cartViewModel.setShowModal(true)}
+        ButtonPay(subTotalAmount) { cartViewModel.setShowModal(true) }
 
         if (showModal) {
-          ModalPay(cartViewModel = cartViewModel, subTotal = subTotalAmount) {
-            orderViewModel.addOrder(subTotalAmount)
-          }
+          ModalPay(
+            cartViewModel = cartViewModel,
+            subTotal = subTotalAmount,
+            orderViewModel = orderViewModel
+          )
         }
 
       }

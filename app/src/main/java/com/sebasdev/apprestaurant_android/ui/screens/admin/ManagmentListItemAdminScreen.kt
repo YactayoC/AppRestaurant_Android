@@ -1,6 +1,7 @@
 package com.sebasdev.apprestaurant_android.ui.screens.admin
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +25,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.sebasdev.apprestaurant_android.domain.model.Product
@@ -35,6 +37,8 @@ import com.sebasdev.apprestaurant_android.ui.navigation.AppScreens
 import com.sebasdev.apprestaurant_android.ui.theme.ColorWhiteCustom
 import com.sebasdev.apprestaurant_android.ui.viewmodel.main.HomeViewModel
 import com.sebasdev.apprestaurant_android.ui.viewmodel.main.ProductDetailViewModel
+import kotlinx.coroutines.flow.collect
+import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,14 +48,16 @@ fun ManagmentListItemAdminScreen(
   preferencesDataStore: PreferencesDataStore,
   homeViewModel: HomeViewModel,
   productDetailViewModel: ProductDetailViewModel,
-  option: String
+  option: String,
 ) {
   val products: List<Product> by homeViewModel.products.observeAsState(initial = emptyList())
   val suppliers: List<Supplier> by homeViewModel.suppliers.observeAsState(initial = emptyList())
+  val category: String by productDetailViewModel.category.observeAsState(initial = "")
 
   LaunchedEffect(true) {
     if (option == "products") {
       homeViewModel.getProducts()
+      productDetailViewModel.getCategoryAdmin()
     } else {
       homeViewModel.getSuppliers()
     }
@@ -75,10 +81,10 @@ fun ManagmentListItemAdminScreen(
         IconButton(
           onClick = {
             navigationController.navigate(
-              AppScreens.ManagmentItemProductScreen.createRoute(
+              if (option == "products") AppScreens.ManagmentItemProductScreen.createRoute(
                 "0",
                 "add"
-              )
+              ) else AppScreens.ManagmentItemSupplierScreen.createRoute("0", "add")
             )
           }, colors = IconButtonDefaults.iconButtonColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -99,7 +105,7 @@ fun ManagmentListItemAdminScreen(
               CircularProgressIndicator()
             }
           } else {
-            Products(navigationController, productDetailViewModel, products, listOf())
+            Products(navigationController, productDetailViewModel, products, listOf(), category)
           }
         }
 
@@ -129,9 +135,20 @@ fun Products(
   productDetailViewModel: ProductDetailViewModel,
   products: List<Product>,
   suppliers: List<Supplier>,
+  category: String? = ""
 ) {
+  val productsFilteredByCategory = products.filter {
+    it.category.lowercase() == (category?.lowercase() ?: "")
+  }
+
   if (products.isNotEmpty()) {
-    ListCardAdmin(products, listOf(), navigationController, productDetailViewModel, "products")
+    ListCardAdmin(
+      productsFilteredByCategory,
+      listOf(),
+      navigationController,
+      productDetailViewModel,
+      "products"
+    )
   } else {
     ListCardAdmin(listOf(), suppliers, navigationController, productDetailViewModel, "suppliers")
   }

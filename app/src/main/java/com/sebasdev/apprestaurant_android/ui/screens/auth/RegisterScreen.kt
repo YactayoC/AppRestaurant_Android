@@ -125,7 +125,7 @@ private fun InputNames(fullname: String, onTextChanged: (String) -> Unit) {
       containerColor = Color.Transparent
     ),
     placeholder = {
-      Text(text = "Ingresa tu nombre completo")
+      Text(text = "Nombre completo")
     },
     leadingIcon = {
       Icon(imageVector = Icons.Outlined.Person2, contentDescription = "names")
@@ -146,7 +146,7 @@ private fun InputPhone(phone: String, onTextChanged: (String) -> Unit) {
       containerColor = Color.Transparent
     ),
     placeholder = {
-      Text(text = "Ingresa tu número de teléfono")
+      Text(text = "Teléfono")
     },
     leadingIcon = {
       Icon(imageVector = Icons.Outlined.Phone, contentDescription = "phone")
@@ -167,7 +167,7 @@ private fun InputEmail(email: String, onTextChanged: (String) -> Unit) {
       containerColor = Color.Transparent
     ),
     placeholder = {
-      Text(text = "Ingresa tu email")
+      Text(text = "Email")
     },
     leadingIcon = {
       Icon(imageVector = Icons.Outlined.Email, contentDescription = "email")
@@ -189,7 +189,7 @@ private fun InputPassword(password: String, onTextChanged: (String) -> Unit) {
       containerColor = Color.Transparent
     ),
     placeholder = {
-      Text(text = "Ingresa tu contraseña")
+      Text(text = "Contraseña")
     },
     leadingIcon = {
       Icon(imageVector = Icons.Outlined.Lock, contentDescription = "password")

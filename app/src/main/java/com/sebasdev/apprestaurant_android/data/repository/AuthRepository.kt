@@ -1,8 +1,8 @@
 package com.sebasdev.apprestaurant_android.data.repository
 
 import com.sebasdev.apprestaurant_android.data.remote.api.AuthServiceImpl
-import com.sebasdev.apprestaurant_android.data.remote.model.LoginResponse
-import com.sebasdev.apprestaurant_android.data.remote.model.RegisterResponse
+import com.sebasdev.apprestaurant_android.data.remote.model.response.LoginResponse
+import com.sebasdev.apprestaurant_android.data.remote.model.response.RegisterResponse
 
 class AuthRepository {
   private val api = AuthServiceImpl()

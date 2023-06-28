@@ -1,4 +1,4 @@
-package com.sebasdev.apprestaurant_android.data.remote.model
+package com.sebasdev.apprestaurant_android.data.remote.model.response
 
 import com.sebasdev.apprestaurant_android.domain.model.User
 

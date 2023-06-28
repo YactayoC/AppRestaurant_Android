@@ -18,12 +18,12 @@ class OrderRepository {
   suspend fun addOrder(
     product: String,
     user: String,
+    direction: String,
     subtotal: Double,
     total: Double,
     quantity: Int,
     state: String
   ): String {
-    Log.d("LOGGER", "Repository: $product, $user, $subtotal, $total, $quantity, $state")
-    return api.addOrder(product, user, subtotal, total, quantity, state)
+    return api.addOrder(product, user, direction, subtotal, total, quantity, state)
   }
 }
