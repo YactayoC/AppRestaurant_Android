@@ -131,7 +131,6 @@ class ProductDetailViewModel(private val preferencesDataStore: PreferencesDataSt
     viewModelScope.launch {
       try {
         val fetchedSupplier = homeUseCase.deleteProduct(idProduct)
-        Log.d("LOGGER", "fetchedSupplier: $fetchedSupplier")
         _message.value = fetchedSupplier
       } catch (e: Exception) {
         Log.e("LOGGER", "Error al eliminar el producto: ${e.message}")

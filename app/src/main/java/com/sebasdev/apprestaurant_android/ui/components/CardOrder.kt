@@ -41,6 +41,8 @@ fun CardOrder(order: Order, navigationController: NavHostController) {
     else -> Color(0xFFdc8620)
   }
 
+  println("CardOrder: ${order._id}")
+
   Card(
     onClick = {
       navigationController.navigate(AppScreens.OrderDetailScreen.createRoute(order._id ?: "0"))

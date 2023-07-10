@@ -55,7 +55,7 @@ fun CardAdmin(
         colors = CardDefaults.cardColors(
           containerColor = ColorWhiteCustom
         ),
-        modifier = Modifier.width(320.dp)
+        modifier = Modifier.width(300.dp)
       ) {
         Row(
           verticalAlignment = Alignment.CenterVertically,

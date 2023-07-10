@@ -61,7 +61,6 @@ fun ManagmentListItemAdminScreen(
     } else {
       homeViewModel.getSuppliers()
     }
-
   }
 
   Scaffold(
@@ -150,7 +149,7 @@ fun Products(
       "products"
     )
   } else {
+    Log.d("Supplierss: ", suppliers.toString())
     ListCardAdmin(listOf(), suppliers, navigationController, productDetailViewModel, "suppliers")
   }
-
 }

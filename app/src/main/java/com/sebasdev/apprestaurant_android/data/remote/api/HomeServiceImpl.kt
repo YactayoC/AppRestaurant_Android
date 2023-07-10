@@ -78,13 +78,8 @@ class HomeServiceImpl {
   suspend fun updateProduct(id: String, request: CreateProductRequest): String {
     return withContext(Dispatchers.IO) {
       try {
-        Log.d("LOGGER", "updateProduct: $id")
-        Log.d("LOGGER", "updateProduct: $request")
-
         val response = retrofit.create(HomeService::class.java).updateProduct(id, request)
-        Log.i("LOGGER", "updateProduct: $response")
         if (response.isSuccessful) {
-          Log.i("LOGGER", "IS SUCEFUL")
           response.body()?.message ?: throw Exception("Error al actualizar el producto")
         } else {
           Log.i("LOGGER", "IS NOT SUCEFUL")

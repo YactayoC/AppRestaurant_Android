@@ -35,6 +35,7 @@ class SupplierDetailViewModel : ViewModel() {
       try {
         Log.d("LOGGER", "Obteniendo proveedor $id")
         val fetchedSupplier = homeUseCase.getSupplier(id)
+        Log.d("fetched", fetchedSupplier.toString())
         _name.value = fetchedSupplier.name
         _ruc.value = fetchedSupplier.ruc
         _phone.value = fetchedSupplier.phone
@@ -89,6 +90,7 @@ class SupplierDetailViewModel : ViewModel() {
     viewModelScope.launch {
       try {
         val fetchedSupplier = homeUseCase.deleteSupplier(idSupplier)
+        Log.d("LOGGER", "fetchedSupplier: $fetchedSupplier")
         _message.value = fetchedSupplier
       } catch (e: Exception) {
         Log.e("LOGGER", "Error al eliminar el proveedor: ${e.message}")

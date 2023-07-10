@@ -17,6 +17,7 @@ class OrderViewModel(private val preferencesDataStore: PreferencesDataStore): Vi
   val messageResponse: LiveData<String> = _messageResponse
 
   fun addOrder(subTotal: Double, direction: String) {
+    println("direction $direction")
     viewModelScope.launch {
       try {
         val productIntCart = preferencesDataStore.getCartItems().first()
@@ -26,7 +27,8 @@ class OrderViewModel(private val preferencesDataStore: PreferencesDataStore): Vi
         val response = orderUseCase.createOrder(
           product = productIntCart._id,
           user = user._id,
-          direction = if (user.direction == "") direction else user.direction,
+//          direction = if (user.direction == "") direction else user.direction,
+          direction = direction,
           subtotal = subTotal,
           total = (productIntCart.price * productIntCart.quantity!!) + 7.50,
           quantity = productIntCart.quantity,

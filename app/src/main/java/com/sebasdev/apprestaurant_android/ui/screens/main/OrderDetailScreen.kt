@@ -64,7 +64,7 @@ fun OrderDetailScreen(
         fullname = "",
         email = "",
         password = "",
-        direction = null,
+        direction = "",
         phone = "",
         profile = "",
         favoriteProducts = emptyList(),
@@ -80,7 +80,7 @@ fun OrderDetailScreen(
         image = "",
         createdAt = "",
         updatedAt = "",
-        quantity = null
+        quantity = 0
       ),
       direction = "",
       subtotal = 0.0,
@@ -198,6 +198,7 @@ fun State(order: Order) {
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun OrderView(order: Order) {
+  println("order: $order")
   Text(text = "Pedido #${order._id}", fontSize = 25.sp, fontWeight = FontWeight.Bold)
   Spacer(modifier = Modifier.size(20.dp))
   Card(

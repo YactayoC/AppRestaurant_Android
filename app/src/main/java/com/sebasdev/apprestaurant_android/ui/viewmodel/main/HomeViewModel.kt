@@ -43,7 +43,7 @@ class HomeViewModel(private val preferencesDataStore: PreferencesDataStore): Vie
   }
 
   fun getSuppliers() {
-    viewModelScope.launch {
+    viewModelScope.launch(Dispatchers.IO) {
       try {
         val suppliers = homeUseCase.getSuppliers()
         withContext(Dispatchers.Main) {

@@ -90,7 +90,7 @@ fun CardCategoryOne(navigationController: NavHostController, preferencesDataStor
         colors = CardDefaults.cardColors(
           containerColor = ColorWhiteCustom
         ),
-        modifier = Modifier.width(320.dp)
+        modifier = Modifier.width(300.dp)
       ) {
         Row(
           verticalAlignment = Alignment.CenterVertically,
@@ -146,7 +146,7 @@ fun CardCategoryTwo(navigationController: NavHostController, preferencesDataStor
         colors = CardDefaults.cardColors(
           containerColor = ColorWhiteCustom
         ),
-        modifier = Modifier.width(320.dp)
+        modifier = Modifier.width(300.dp)
       ) {
         Row(
           verticalAlignment = Alignment.CenterVertically,
@@ -202,7 +202,7 @@ fun CardCategoryThree(navigationController: NavHostController, preferencesDataSt
         colors = CardDefaults.cardColors(
           containerColor = ColorWhiteCustom
         ),
-        modifier = Modifier.width(320.dp)
+        modifier = Modifier.width(300.dp)
       ) {
         Row(
           verticalAlignment = Alignment.CenterVertically,
