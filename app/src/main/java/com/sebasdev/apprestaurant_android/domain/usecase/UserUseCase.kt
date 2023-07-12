@@ -20,8 +20,7 @@ class UserUseCase {
     direction: String,
     phone: String,
     password: String,
-    profile: String
   ): String {
-    return repository.updateUser(idUser, fullname, direction, phone, password, profile)
+    return repository.updateUser(idUser, fullname, direction, phone, password)
   }
 }

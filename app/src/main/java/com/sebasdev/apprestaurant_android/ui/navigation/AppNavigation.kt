@@ -49,7 +49,7 @@ fun AppNavigation(preferencesDataStore: PreferencesDataStore) {
 
   NavHost(
     navController = navController,
-    startDestination = AppScreens.HomeAdminScreen.route
+    startDestination = AppScreens.LoginScreen.route
   ) {
     composable(route = AppScreens.LoginScreen.route) {
       LoginScreen(navController, LoginViewModel(preferencesDataStore))

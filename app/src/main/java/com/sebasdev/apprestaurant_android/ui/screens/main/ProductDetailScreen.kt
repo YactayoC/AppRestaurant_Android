@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
@@ -143,7 +144,7 @@ fun TitleProduct(product: Product) {
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
-    Text(text = product.name.capitalize(), fontSize = 24.sp, fontWeight = FontWeight.Bold)
+    Text(text = product.name.capitalize(), fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.width(200.dp))
     Text(text = "S/. ${product.price}", fontSize = 24.sp, fontWeight = FontWeight.Bold)
   }
 }

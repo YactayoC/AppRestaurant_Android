@@ -106,11 +106,11 @@ fun OrderDetailScreen(
           .fillMaxSize()
           .padding(15.dp),
       ) {
-        Spacer(modifier = Modifier.size(60.dp))
+        Spacer(modifier = Modifier.size(50.dp))
         State(order)
-        Spacer(modifier = Modifier.size(40.dp))
+        Spacer(modifier = Modifier.size(20.dp))
         OrderView(order)
-        Spacer(modifier = Modifier.size(40.dp))
+        Spacer(modifier = Modifier.size(20.dp))
         Summary(order)
       }
     },
@@ -226,7 +226,7 @@ fun OrderView(order: Order) {
           .clip(RoundedCornerShape(10.dp))
       )
       Column(
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+        verticalArrangement = Arrangement.spacedBy(15.dp),
       ) {
         Text(text = "${order.product.name.capitalize()}", fontSize = 18.sp)
         Row(

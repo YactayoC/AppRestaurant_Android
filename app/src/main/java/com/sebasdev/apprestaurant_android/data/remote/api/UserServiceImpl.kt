@@ -1,5 +1,6 @@
 package com.sebasdev.apprestaurant_android.data.remote.api
 
+import android.util.Log
 import com.google.gson.Gson
 import com.sebasdev.apprestaurant_android.data.remote.model.response.ErrorResponse
 import com.sebasdev.apprestaurant_android.data.remote.network.RetrofitInstance
@@ -53,12 +54,12 @@ class UserServiceImpl {
     direction: String,
     phone: String,
     password: String,
-    profile: String,
   ): String {
     return withContext(Dispatchers.IO) {
       try {
+        Log.d("TAG", "updateUser: $idUser, $fullname, $direction, $phone, $password")
         val response = retrofit.create(UserService::class.java)
-          .updateUser(idUser, fullname, direction, phone, password, profile)
+          .updateUser(idUser, fullname, direction, phone, password)
         if (response.isSuccessful) {
           response.body()?.message ?: ""
         } else {

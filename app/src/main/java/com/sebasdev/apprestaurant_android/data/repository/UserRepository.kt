@@ -24,8 +24,7 @@ class UserRepository {
     direction: String,
     phone: String,
     password: String,
-    profile: String
   ): String {
-    return api.updateUser(idUser, fullname, direction, phone, password, profile)
+    return api.updateUser(idUser, fullname, direction, phone, password)
   }
 }

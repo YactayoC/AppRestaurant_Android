@@ -81,7 +81,7 @@ fun CardOrder(order: Order, navigationController: NavHostController) {
           )
         }
       }
-      Text(text = "${order.product.name.capitalize()}", fontSize = 16.sp)
+      Text(text = "${order.product.name.capitalize() ?: "no hay name"}", fontSize = 16.sp)
       Row(
         horizontalArrangement = Arrangement.spacedBy(20.dp)
       ) {

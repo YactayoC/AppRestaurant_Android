@@ -12,26 +12,26 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface UserService {
-  @FormUrlEncoded
-  @POST("user/favorites/{idUser}")
-  suspend fun addProductFavorite(
-    @Path("idUser") idUser: String,
-    @Field("idProduct") idProduct: String,
-    @Field("isAdd") isAdd: Boolean
-  ): Response<AddProductFavoriteResponse>
+    @FormUrlEncoded
+    @POST("user/favorites/{idUser}")
+    suspend fun addProductFavorite(
+        @Path("idUser") idUser: String,
+        @Field("idProduct") idProduct: String,
+        @Field("isAdd") isAdd: Boolean
+    ): Response<AddProductFavoriteResponse>
 
-  @GET("user/favorites/{idUser}")
-  suspend fun getProductsFavorite(
-    @Path("idUser") idUser: String,
-  ): Response<List<Product>>
+    @GET("user/favorites/{idUser}")
+    suspend fun getProductsFavorite(
+        @Path("idUser") idUser: String,
+    ): Response<List<Product>>
 
-  @PATCH("user/{idUser}")
-  suspend fun updateUser(
-    @Path("idUser") idUser: String,
-    @Field("fullname") fullname: String,
-    @Field("direction") direction: String,
-    @Field("phone") phone: String,
-    @Field("password") password: String,
-    @Field("profile") profile: String,
-  ): Response<UpdateUserResponse>
+    @FormUrlEncoded
+    @PATCH("user/{idUser}")
+    suspend fun updateUser(
+        @Path("idUser") idUser: String,
+        @Field("fullname") fullname: String,
+        @Field("direction") direction: String,
+        @Field("phone") phone: String,
+        @Field("password") password: String,
+    ): Response<UpdateUserResponse>
 }
